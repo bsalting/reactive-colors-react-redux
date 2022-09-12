@@ -1,0 +1,26 @@
+body {
+  font-family: "Lucida Grande";
+  color: Black;
+}
+
+h1 {
+  margin: 30px 0px 30px 60px;
+}
+
+li {
+  list-style: none;
+  color: white;
+  border: 1px solid gray;
+  margin: 20px 60px 20px 20px;
+  text-shadow: 1px 1px black;
+  text-transform: uppercase;
+  padding: 10px;
+}
+
+li button {
+  margin: 10px;
+}
+
+#generate {
+  margin-left: 60px;
+}
