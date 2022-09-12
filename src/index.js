@@ -1,18 +1,22 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import axios from "axios";
-const { useState, useEffect } = React;
+const { useEffect } = React;
 const { faker } = require("@faker-js/faker");
+import store from "./store";
+import { Provider, useDispatch, useSelector } from "react-redux";
 
 const root = ReactDOM.createRoot(document.querySelector("#root"));
 
 const App = () => {
-  const [colors, setColors] = useState([]);
+  const dispatch = useDispatch();
+  const colors = useSelector((state) => state.colors);
+
   useEffect(() => {
     const loadColors = async () => {
       try {
         const response = await axios.get("/api/colors");
-        setColors(response.data);
+        dispatch({ type: "SET_COLORS", colors: response.data });
       } catch (ex) {
         console.log(ex);
       }
@@ -23,7 +27,7 @@ const App = () => {
   const destroyColor = async (color) => {
     try {
       await axios.delete(`/api/colors/${color.id}`);
-      setColors(colors.filter((col) => col.id !== color.id));
+      dispatch({ type: "DELETE_COLOR", color });
     } catch (ex) {
       console.log(ex);
     }
@@ -33,8 +37,7 @@ const App = () => {
     try {
       const rgb = faker.color.rgb();
       const response = await axios.post("/api/colors", { rgb });
-      const color = response.data;
-      setColors([...colors, color]);
+      dispatch({ type: "NEW_COLOR", color: response.data });
     } catch (ex) {
       console.log(ex);
     }
@@ -62,4 +65,8 @@ const App = () => {
   );
 };
 
-root.render(<App />);
+root.render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
