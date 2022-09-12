@@ -1,15 +1,10 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
 import axios from "axios";
-import store from "./store";
-import Colors from "./Colors";
-import { Provider, useDispatch, useSelector } from "react-redux";
 const { useEffect } = React;
 const { faker } = require("@faker-js/faker");
+import { useDispatch, useSelector } from "react-redux";
 
-const root = ReactDOM.createRoot(document.querySelector("#root"));
-
-const App = () => {
+const Colors = () => {
   const dispatch = useDispatch();
   const colors = useSelector((state) => state.colors);
 
@@ -45,18 +40,19 @@ const App = () => {
   };
 
   return (
-    <div>
-      <h1> React-ive Colors </h1>
-      <button id="generate" onClick={createColor}>
-        <strong>New Color</strong>
-      </button>
-      <Colors />
-    </div>
+    <ul>
+      {colors.map((color) => {
+        return (
+          <li key={color.id} style={{ backgroundColor: color.rgb }}>
+            {color.rgb} <br />
+            <button onClick={() => destroyColor(color)}>
+              <strong> x </strong>
+            </button>
+          </li>
+        );
+      })}
+    </ul>
   );
 };
 
-root.render(
-  <Provider store={store}>
-    <App />
-  </Provider>
-);
+export default Colors;
